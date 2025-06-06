@@ -1,0 +1,20 @@
+[
+    {
+        "book_id": "B001",
+        "title": "The Pragmatic Programmer",
+        "author": "Andy Hunt",
+        "genre": "Programming",
+        "price": 45.99,
+        "published_date": "1999-10-20",
+        "stock": 10
+    },
+    {
+        "book_id": "B002",
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "genre": "Programming",
+        "price": 39.99,
+        "published_date": "2008-08-11",
+        "stock": 0
+    }
+]
