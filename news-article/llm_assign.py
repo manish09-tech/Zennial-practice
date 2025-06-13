@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import json
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, GPT2Model
 
-NEWS_API_URL = "https://newsapi.org/v2/top-headlines"
+NEWS_API_URL = "https://newsapi.org/v2/everything"
 API_KEY = "f639346990a34776916673d5e3548c28"
 HEADLINE_COUNT = 5
 ARTICLE_COUNT = 1
@@ -14,11 +14,11 @@ ARTICLE_COUNT = 1
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-gen_model = GPT2LMHeadModel.from_pretrained("gpt2")
+embedding_model = GPT2LMHeadModel.from_pretrained("gpt2")
 emb_model = GPT2Model.from_pretrained("gpt2")
 
 tokenizer.pad_token = tokenizer.eos_token
-gen_model.pad_token_id = gen_model.config.eos_token_id
+embedding_model.pad_token_id = embedding_model.config.eos_token_id
 emb_model.pad_token_id = emb_model.config.eos_token_id
 
 def get_mean_embedding(input_text):
@@ -39,10 +39,9 @@ def fetch_news_articles(api_key, count) -> list[dict]:
     logging.info(f"Fetched {len(articles)} articles")
     return articles
 
-
 def generate_headlines(prompt):
     input_ids = tokenizer(prompt, return_tensors="pt").input_ids
-    outputs = gen_model.generate(
+    outputs = embedding_model.generate(
         input_ids,
         do_sample=True,
         num_return_sequences=HEADLINE_COUNT,
