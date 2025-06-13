@@ -5,33 +5,34 @@ import torch.nn.functional as F
 import json
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, GPT2Model
 
-NEWS_API_URL = "https://newsapi.org/v2/everything"
+NEWS_API_URL = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=f639346990a34776916673d5e3548c28"
 API_KEY = "f639346990a34776916673d5e3548c28"
 HEADLINE_COUNT = 5
-ARTICLE_COUNT = 1
+ARTICLE_COUNT = 2
 
 # Logging-config
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+# Load tokenizer and models
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-embedding_model = GPT2LMHeadModel.from_pretrained("gpt2")
+gen_model = GPT2LMHeadModel.from_pretrained("gpt2")
 emb_model = GPT2Model.from_pretrained("gpt2")
 
+# Padding tokens
 tokenizer.pad_token = tokenizer.eos_token
-embedding_model.pad_token_id = embedding_model.config.eos_token_id
+gen_model.pad_token_id = gen_model.config.eos_token_id
 emb_model.pad_token_id = emb_model.config.eos_token_id
 
 def get_mean_embedding(input_text):
-    input_tokens = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True)
+    input_tokens = tokenizer(input_text, return_tensors="pt")
     with torch.no_grad():
         output = emb_model(**input_tokens)
     return output.last_hidden_state.mean(dim=1)
 
 def fetch_news_articles(api_key, count) -> list[dict]:
-    logging.info("Fetching news articles...")
+    logging.info("Fetching news articles... Please wait")
     response = requests.get(NEWS_API_URL, params={
         "apiKey": api_key,
-        "country": "us",
         "pageSize": count
     })
     response.raise_for_status()
@@ -41,7 +42,7 @@ def fetch_news_articles(api_key, count) -> list[dict]:
 
 def generate_headlines(prompt):
     input_ids = tokenizer(prompt, return_tensors="pt").input_ids
-    outputs = embedding_model.generate(
+    outputs = gen_model.generate(
         input_ids,
         do_sample=True,
         num_return_sequences=HEADLINE_COUNT,
@@ -51,10 +52,11 @@ def generate_headlines(prompt):
         top_p=0.95
     )
     return [
-        tokenizer.decode(output, skip_special_tokens=True).replace(prompt, "").strip() for output in outputs
+        tokenizer.decode(output, skip_special_tokens=True).replace(prompt, "").strip()
+        for output in outputs
     ]
 
-def process_news_articles(news_articles):
+def process_news_articles(news_articles, output_file="ZPMJ-10114_manish_jakkula_response.json"):
     final_output = {
         "status": "ok",
         "news_articles": []
@@ -69,16 +71,16 @@ def process_news_articles(news_articles):
         if not news_text:
             continue
 
-        prompt = f"Generate a headline for this news: {news_text} Headline:"
+        prompt = f"Generate a headline for this news: \n{news_text}\nHeadline:"
         generated_headlines = generate_headlines(prompt)
         news_text_embedding = get_mean_embedding(prompt)
 
-        result = []
+        scored_headlines = []
         for id, headline in enumerate(generated_headlines):
             headline_embedding = get_mean_embedding(headline)
             score = F.cosine_similarity(headline_embedding, news_text_embedding).item()
-            result.append({
-                "score": id + 1,  
+            scored_headlines.append({
+                "score": id + 1, 
                 "text": headline
             })
 
@@ -86,15 +88,19 @@ def process_news_articles(news_articles):
             "title": title,
             "description": description,
             "content": content,
-            "top 5 headlines": result
+            "top 5 headlines": scored_headlines
         })
 
-    print(final_output)
+   
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(final_output, f, indent=2)
+    logging.info(f"Saved output to {output_file}")
 
+    print(json.dumps(final_output, indent=2))
 
 if __name__ == "__main__":
     try:
         articles = fetch_news_articles(API_KEY, ARTICLE_COUNT)
-        process_news_articles(articles)
+        process_news_articles(articles, output_file="ZPMJ-10114_manish_jakkula_response.json")
     except Exception as e:
         logging.error(f"Error occurred: {str(e)}")
