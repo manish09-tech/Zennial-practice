@@ -61,6 +61,57 @@ def list_labels():
     for idx, label in label_map.items():
         print (f"{idx} : {label}")
 
+def compare_labels():
+    first_label = input("Enter the name of first lable : ") # "AmeetParse"
+    second_lable = input("Enter the name of second lable : ") # "AllenJoe"
+    v1 = v2 = None
+
+    for idx, label in label_map.items(): # Iterate for every row in the collection
+       if  label == first_label:           
+           v1 = index.reconstruct(idx)
+        #    print (f"V1:::::{v1}") 
+       
+       if label == second_lable:
+           v2 = index.reconstruct(idx)
+        #    print (f"V2:::::{v2}")
+    
+    if v1 is None or v2 is None:
+        print ("first or second label was not found.....")
+        return
+    
+    v1, v2 = np.array(v1) ,np.array(v2)
+
+    # np.dot(v1,v2) = Measure how aligned these vectors are. v1, v2
+    # (np.linalg.nom(Vx) = Length of each Vector
+    # similarity : Score : 1.0 : Same :::: 0.8 + - Very Similar :::: 0.0 ::: NR ::: < 0 :: 
+    similarity = float (np.dot(v1,v2) / (np.linalg.norm(v1)  * (np.linalg.norm(v2) )))
+    print (f"similarity Score for {first_label} and {second_lable} is : {similarity}")
+
+
+def main():
+    while True:
+        print  ("\n ===== FAISS CLI Tools {Add, List, Compare} =====")
+        print  ("1. Add new text")
+        print  ("2. List Lables")
+        print  ("3. Compare Lables")
+        print  ("4. Exit CLI")
+        choice = input("Select an FAISS CLI Operation : ")
+
+        if choice == "1":
+            add_to_index() # Save Text to FAISS and Entry in Pickle
+        elif choice == "2":
+            list_labels()
+        elif choice == "3":
+            compare_labels()
+        elif choice == "4":
+            break
+        else:
+            print("Invalid CLI input. Use from 1 to 4 and try again")
+            
+            
+if __name__ == "__main__":
+    main()
+
 def main():
     add_to_index()
     # list_labels()
