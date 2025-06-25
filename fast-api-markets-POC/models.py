@@ -5,8 +5,8 @@ class CreateAccountRequest(BaseModel):
     
 class AddCartRequest(BaseModel):
     customer_id: str
-    products:int
+    product: int
     
 class RemoveCartRequest(BaseModel):
     customer_id: str
-    products:int
+    product: int

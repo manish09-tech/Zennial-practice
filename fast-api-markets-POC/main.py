@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 import asyncio
-from services import create_customer_account
+from services import add_cart, create_customer_account
 
 from models import AddCartRequest, CreateAccountRequest, RemoveCartRequest
 
@@ -16,7 +16,8 @@ async def create_cus_account(data: CreateAccountRequest):
 
 @app.post("/add-items")
 async def add_to_cart(data: AddCartRequest):
-    return True
+    products = await add_cart(data.customer_id,data.product)
+    return {"message" : f"added product to cart with id {data.customer_id} with {data.product} products and available products in the cart is {products} "}
 
 @app.post("/remove-items")
 async def remove_from_cart(data: RemoveCartRequest):
