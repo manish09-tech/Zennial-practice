@@ -1,5 +1,5 @@
 import asyncio
-from db import accounts
+from database import accounts
 
 async def create_customer_account(customer_id: str):
     if customer_id in accounts:
