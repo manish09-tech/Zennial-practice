@@ -25,6 +25,8 @@ def add_document():
     
     text_chunks = chunk_text (text)
 
+    print (f"content: {text_chunks}")
+
 def query():
     return True
 
