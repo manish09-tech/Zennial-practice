@@ -1,0 +1,7 @@
+BASE_URL = ""
+NEWS_API_KEY = ""
+DEFAULT_KEY = "bitcoin"
+MAX_PAGES = 3
+PAGE_SIZE = 10
+QUEUE_DIR = "Queue"
+LOD_DIR = "logs"
