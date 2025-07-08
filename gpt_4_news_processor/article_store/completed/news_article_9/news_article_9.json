@@ -1,0 +1,7 @@
+{
+  "title": "Breaking News 9",
+  "description": "This is a short description of the news article 9.",
+  "content": "Full content of article 9. This article discusses topics relevant to test category classification.",
+  "recommended_category": "Articles 2,3,4,5",
+  "gpt4_suggestion_category": "\"News\""
+}

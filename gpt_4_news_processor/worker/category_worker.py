@@ -1,8 +1,17 @@
-import os
+# article_classifier.py
+
 import sys
+import os
+
+# Add the parent directory to the sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
 from tqdm import tqdm
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
+from utiles.logger import get_logger
+
+# Setup logger
+logger = get_logger("article_classifier")
 
 # Setup Directories
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -16,7 +25,7 @@ FAILED_DIR = os.path.join(ARTICLE_STORE_BASE, "failed")
 for directory in [QUEUE_DIR, INPROGRESS_DIR, COMPLETED_DIR, FAILED_DIR]:
     os.makedirs(directory, exist_ok=True)
 
-#  Load GPT-2 model and tokenizer
+# Load GPT-2 model and tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 
@@ -50,9 +59,7 @@ def get_category_from_gpt2(prompt):
         top_p=0.9,
         top_k=50
     )
-
     result = tokenizer.decode(output[0], skip_special_tokens=True)
-
     result_lines = result.split("Category:") if "Category:" in result else result.split("Suggested Category:")
 
     if len(result_lines) > 1:
@@ -65,14 +72,14 @@ def process_articles(article_id):
     article_json_file = os.path.join(folder_path, f"{article_id}.json")
 
     if not os.path.exists(article_json_file):
-        print(f"[SKIP] {article_json_file} does not exist.")
+        logger.warning(f"[SKIP] {article_json_file} does not exist.")
         return
     
     with open(article_json_file, "r", encoding="utf-8") as f:
         try:
             article_json = json.load(f)
         except Exception as e:
-            print(f"[ERROR] Failed to parse JSON for article {article_id}: {e}")
+            logger.error(f"[ERROR] Failed to parse JSON for article {article_id}: {e}")
             return
 
     title = article_json.get("title", "")
@@ -95,11 +102,11 @@ def process_articles(article_id):
     with open(completed_json_file, "w", encoding="utf-8") as f:
         json.dump(article_json, f, indent=2)
 
-    print(f"[DONE] Processed article {article_id}")
+    logger.info(f"[DONE] Processed article {article_id}")
 
-def generate_sample_articles():
-    print("[INFO] Generating sample test articles...")
-    for i in range(1, 16):
+def generate_news_articles():
+    logger.info("[INFO] Generating sample test articles...")
+    for i in range(1, 11):
         article_id = f"news_article_{i}"
         folder = os.path.join(QUEUE_DIR, article_id)
         os.makedirs(folder, exist_ok=True)
@@ -118,13 +125,13 @@ def main():
     ]
 
     if not article_folders:
-        generate_sample_articles()
+        generate_news_articles()
         article_folders = [
             name for name in os.listdir(QUEUE_DIR)
             if os.path.isdir(os.path.join(QUEUE_DIR, name))
         ]
 
-    print(f"[INFO] {len(article_folders)} articles available to process.")
+    logger.info(f"[INFO] {len(article_folders)} articles available to process.")
 
     for article_id in tqdm(article_folders, desc="Categorizing articles"):
         process_articles(article_id)
