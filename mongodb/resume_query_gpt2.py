@@ -5,7 +5,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 MONGO_URL = "mongodb+srv://manishsaijakkula:Manishj09@news-article.jjyhq8r.mongodb.net/"
-DATABASE_NAME = "resumeDB"
+DATABASE_NAME = "resumesDB"
 COLLECTION_NAME = "resumes"
 
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
@@ -64,6 +64,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
