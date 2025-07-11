@@ -16,6 +16,7 @@ COLLECTION_NAME = ""
 def load_pdf_text(pdf_path):
     pdf_document = fitz.open(pdf_path)
     return "\n".join({page.get_text() for page in pdf_document})
+
 def index_resume():
     return True
 
