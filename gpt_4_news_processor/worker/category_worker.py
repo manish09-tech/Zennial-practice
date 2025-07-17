@@ -1,5 +1,3 @@
-# article_classifier.py
-
 import sys
 import os
 

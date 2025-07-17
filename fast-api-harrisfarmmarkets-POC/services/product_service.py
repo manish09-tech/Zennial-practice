@@ -1,6 +1,6 @@
 import database
 from fastapi import HTTPException
-from models import ProductCreate, ProductUpdate
+from models import ProductCreate
 
 def create_product(product: ProductCreate):
     product_id= database.product_id_counter
