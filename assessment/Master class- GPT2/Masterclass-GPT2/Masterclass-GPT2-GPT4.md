@@ -37,7 +37,7 @@ FastAPI wraps everything into a working AI application ready for deployment or e
 
 ---
 
-### 🧠 What is a Model?
+### 🧠 What is a Model? 
 
 A **model** in machine learning is a mathematical function trained to recognize patterns and make predictions based on input data.
 
