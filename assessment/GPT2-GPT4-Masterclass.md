@@ -247,40 +247,26 @@ async def chat(req: Request):
 
 ---
 
-## ✅ Summary
-
-| Tool       | Purpose                            |
-|------------|------------------------------------|
-| **GPT-4**  | Language generation & understanding |
-| **Tokens** | Smallest units GPT processes        |
-| **Embeddings** | Vectors capturing text meaning |
-| **FAISS**  | Fast vector similarity search       |
-| **MongoDB**| Stores text + metadata + vectors    |
-| **FastAPI**| Wraps everything in a deployable API|
-
----
-
 
 ## 💬 Questions
 
-1. How do transformer models use self-attention for context understanding?
-2. What are subword tokens, and why are they useful in GPT models?
-3. How does GPT-4 differ in architecture from GPT-2?
-4. What are the benefits of using FAISS over brute-force search?
-5. How can you store and retrieve documents based on embedding similarity?
-6. What is the role of `IndexFlatL2` in FAISS?
-7. How would you use vector indexes for question answering?
-8. How do embeddings improve search quality over keyword-based methods?
-9. What are common methods to reduce vector dimensionality?
-10. How can you cluster similar text documents using embeddings?
-11. What are best practices for storing metadata with vectors in MongoDB?
-12. How do you deploy a FastAPI app with GPU support?
-13. How can FastAPI be used to expose multiple AI models?
-14. What is the tradeoff between cosine and Euclidean distance in vector search?
-15. How can you implement hybrid search (text + vector) in MongoDB?
-16. How do you handle large-scale embedding storage and retrieval efficiently?
-17. What are common issues when using FAISS with dynamic data?
-18. How can you stream responses from GPT using FastAPI?
-19. What are the rate limits and best practices for the OpenAI API?
-20. How do you test the semantic similarity between user queries and stored documents?
-"""
+1. What does GPT stand for?
+2. What is a token in GPT?
+3. What is an embedding?
+4. Why do we use embeddings?
+5. What is FAISS used for?
+6. What is MongoDB?
+7. What is FastAPI used for?
+8. How do you convert text into tokens?
+9. How do you generate embeddings?
+10. How do you find similar texts?
+11. What is a vector search?
+12. What is cosine similarity?
+13. How do you store vectors in MongoDB?
+14. What is the use of OpenAI API?
+15. What is an endpoint in FastAPI?
+16. What language is used in FastAPI?
+17. What is a query?
+18. What is a response in an API?
+19. Why use FastAPI with GPT?
+20. What is the benefit of using embeddings for search?
