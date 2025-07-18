@@ -6,8 +6,12 @@
 
 ## Overview
 
-GPT (Generative Pretrained Transformer) is a powerful large language model (LLM) trained to generate human-like text.  
-This guide covers tokenization, embeddings, FAISS for similarity search, MongoDB for storage, and FastAPI for serving.
+GPT (Generative Pretrained Transformer) is a language model trained to generate human-like text.  
+It's called “generative” because it can create text, code, summaries, and more from input prompts.  
+Being “pretrained,” it learns from vast text datasets before fine-tuning or usage in real apps.  
+This guide explains how GPT uses tokens and embeddings to understand and process language.  
+You’ll use FAISS to store and search embeddings, and MongoDB to manage related text data.  
+FastAPI wraps everything into a working AI application ready for deployment or experimentation.
 
 ---
 
