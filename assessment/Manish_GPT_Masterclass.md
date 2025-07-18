@@ -1,31 +1,63 @@
+# GPT-2 / GPT-4 Masterclass  
+**Tokens · Embeddings · Vector Search · FAISS · MongoDB · FastAPI**
 
-# GPT Masterclass (GPT-2 / GPT-4)
+---
 
 ## Overview
 
-In this guide, I explore how GPT models work, including how they handle tokens and create embeddings. I also demonstrate how to use these embeddings for vector-based search using FAISS, store them in MongoDB, and build simple AI applications with FastAPI. The goal is to show how these tools can work together in real-world scenarios.
+GPT (Generative Pretrained Transformer) is a language model trained to generate human-like text.  
+It's called “generative” because it can create text, code, summaries, and more from input prompts.  
+Being “pretrained,” it learns from vast text datasets before fine-tuning or usage in real apps.  
+This guide explains how GPT uses tokens and embeddings to understand and process language.  
+You’ll use FAISS to store and search embeddings, and MongoDB to manage related text data.  
+FastAPI wraps everything into a working AI application ready for deployment or experimentation.
 
+---
 
 ## Table of Contents
 
-1. Tokens in GPT
-2. Embeddings with GPT
-3. Vector-Based Search
-4. FAISS for Similarity Search
-5. Storing Vectors in MongoDB
-6. FastAPI to Build AI Applications
+1. [Tokens in GPT](#1-tokens-in-gpt)  
+2. [Embeddings with GPT](#2-embeddings-with-gpt)  
+3. [Vector-Based Search](#3-vector-based-search)  
+4. [faiss for Storing and Searching Text](#4-faiss-for-storing-and-searching-text)  
+5. [Storing Vectors in MongoDB](#5-storing-vectors-in-mongodb)  
+6. [FastAPI to Build AI Applications](#6-fastapi-to-build-ai-applications)
 
+---
 
 ## 1. Tokens in GPT
 
-Tokens are chunks of text (words, subwords, or characters) that GPT models process.
+### 🔍 What is GPT?
 
-**Example**: When chatting with ChatGPT or a website bot, your message is split into tokens before the model understands it.
+**GPT** stands for **Generative Pretrained Transformer**:
 
-> **Use Case**: Token counting is critical for managing cost and performance in long chats or large document summaries.
+- **Generative**: It generates human-like text responses.
+- **Pretrained**: Trained on massive datasets before use.
+- **Transformer**: Uses self-attention to understand context in language.
 
-### Example: Tokenizing Text
+---
 
+### 🧠 What is a Model?
+
+A **model** in machine learning is a mathematical function trained to recognize patterns and make predictions based on input data.
+
+- In GPT's case, the model learns how words and sentences are formed.
+- It maps **input tokens** (like words) to **output tokens** (like answers, code, or completions).
+- Models have versions (like GPT-2, GPT-3.5, GPT-4), each trained with more data and better architecture.
+
+> 💡 **Tip**: Larger models are more accurate but require more memory and processing power.
+
+---
+
+Before GPT can understand or generate anything, it first breaks the input into **tokens**, which are chunks of text (words, subwords, or characters).
+
+**Example**: A sentence like `"Hello GPT World!"` is converted into token IDs before the model processes it.
+
+> 💡 **Use Case**: Controlling token count is important for cost and performance when calling large models.
+
+### 🧪 Code: Tokenizing Text
+
+```python
 from transformers import GPT2Tokenizer
 
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
@@ -35,23 +67,27 @@ ids = tokenizer.encode(text)
 
 print("Tokens:", tokens)
 print("Token IDs:", ids)
+```
 
-# output: 
+**Output:**
+```
 Tokens: ['Hello', 'ĠGP', 'T', 'ĠWorld', '!']
 Token IDs: [15496, 50256, 22173, 0, 328]
+```
 
+---
 
 ## 2. Embeddings with GPT
 
-Embeddings are numerical representations of text. GPT-4 uses these to understand relationships in text.
+Embeddings are numerical vectors that represent the meaning of text in a machine-understandable form.
 
-**Example**: LinkedIn and Google News recommend articles or jobs that are similar in meaning—not keywords—based on embeddings.
+**Example**: Google News and LinkedIn use embeddings to match articles or jobs with your interests — even when keywords differ.
 
-> **Use Case**: Matching queries with documents in semantic search systems.
+> 💡 **Use Case**: Semantic search, chat memory, question answering, and recommendation systems.
 
+### 🧪 Code: Generate Embeddings Using OpenAI API
 
-### Example: Get Embeddings using OpenAI API
-
+```python
 import openai
 
 openai.api_key = "API_KEY"
@@ -62,199 +98,248 @@ response = openai.Embedding.create(
 )
 
 embedding = response['data'][0]['embedding']
-print("Vector:", embedding[:10])  # Print first 10 dims
+print("Vector:", embedding[:10])  # Show first 10 dimensions
+```
 
-# output: 
-Vector: [0.01827407, -0.01295031, 0.02183194, -0.00715381, 0.00675101, -0.01925917, 0.00435264, -0.00098662, 0.01234759, -0.00519476]
+**Output:**
+```
+Vector: [0.01827, -0.01295, 0.02183, -0.00715, 0.00675, -0.01925, 0.00435, -0.00098, 0.01234, -0.00519]
+```
 
+---
 
 ## 3. Vector-Based Search
 
-Search based on semantic similarity using cosine distance between embeddings.
+Instead of using keywords, vector-based search matches items by **semantic meaning** using cosine similarity or distance metrics.
 
-**Example**: Amazon shows product suggestions like "Customers also viewed" based on vector similarity, not product names.
+**Example**: "Laptop deals" could match documents like "Best Lenovo's under 50000 rupees" even if keywords differ.
 
-> **Use Case**: Product discovery, intelligent auto-complete, and document similarity engines.
+> 💡 **Use Case**: Smart search bars, personalized product recommendations, document similarity engines.
 
-### Example: Cosine Similarity with NumPy
+### 🧪 Code: Cosine Similarity with NumPy
 
-# Step 1: Define two short vectors
+```python
 sentence1 = "Cats are cute"
 sentence2 = "Dogs are friendly"
 
 embedding1 = [2, 0, 1]
 embedding2 = [1, 1, 1]
 
-# Step 2: Cosine similarity function
 def cosine_similarity(vec1, vec2):
-    dot = sum(a * b for a, b in zip(vec1, vec2)) #zip() is a built-in function that combines elements
+    dot = sum(a * b for a, b in zip(vec1, vec2))
     mag1 = sum(a ** 2 for a in vec1) ** 0.5
     mag2 = sum(b ** 2 for b in vec2) ** 0.5
     return dot / (mag1 * mag2)
 
-# Step 3: Calculate and print similarity
 similarity = cosine_similarity(embedding1, embedding2)
 
-print(f"Sentence 1: {sentence1}")
-print(f"Sentence 2: {sentence2}")
-print(f"Cosine Similarity: {similarity:.4f} (1 = Very Similar, 0 = Different)")
+print(f"Similarity: {similarity:.4f}")
+```
 
-# output: 
-Sentence 1: Cats are cute  
-Sentence 2: Dogs are friendly  
-Cosine Similarity: 0.7746 (1 = Very Similar, 0 = Different)
+**Output:**
+```
+Similarity: 0.7746
+```
 
+---
 
+## 4. faiss for Storing and Searching Text
 
-## 4. FAISS for Similarity Search
+**FAISS** allows you to store millions of text embeddings and perform efficient similarity search.
 
-FAISS helps you search through millions of embeddings efficiently.
+Text is converted into embeddings using OpenAI or similar models, then stored in a FAISS index. Queries are embedded too, and matched against stored data.
 
-**Example**: Spotify recommends songs by comparing vector embeddings of your listening history.
+**Example**: A query like `"Travel in Europe"` can return `"Best places to visit in Europe"` using semantic similarity.
 
-> **Use Case**: Personalized content feeds, document deduplication, fast nearest-neighbor search.
+> 💡 **Use Case**: AI search engines, content recommendations, chatbot memory.
 
-### Example: Basic FAISS Search
+### 🧪 Code: Store Text as Embeddings in FAISS
 
+```python
+import openai
 import faiss
 import numpy as np
 
-# Step 1: Dimension of vectors (2D)
-d = 2
+openai.api_key = "API_KEY"
 
-# Step 2: Create the index
-index = faiss.IndexFlatL2(d)
+texts = [
+    "What is AI?",
+    "How does machine learning work?",
+    "The future of technology in education",
+    "Best places to visit in Europe"
+]
 
-# Step 3: Add some vectors to the index
-data = np.array([[1, 1], [2, 2], [10, 10]]).astype('float32')
-index.add(data)
+def get_embedding(text):
+    response = openai.Embedding.create(
+        input=text,
+        model="text-embedding-ada-002"
+    )
+    return np.array(response['data'][0]['embedding'], dtype='float32')
 
-# Step 4: Define a query vector
-query = np.array([[1, 2]]).astype('float32')
+embeddings = np.array([get_embedding(t) for t in texts])
+dimension = len(embeddings[0])
 
-# Step 5: Search for 2 nearest vectors
-D, I = index.search(query, k=2)
+index = faiss.IndexFlatL2(dimension)
+index.add(embeddings)
 
-print("Nearest indices:", I)
-print("Distances:", D)
+query = "Travel destinations in Europe"
+query_embedding = get_embedding(query).reshape(1, -1)
 
-# output:
-Nearest indices: [[1 0]]
-Distances: [[1.0 1.0]]
+distances, indices = index.search(query_embedding, k=2)
 
+print("Query:", query)
+for i, idx in enumerate(indices[0]):
+    print(f"Match {i+1}: {texts[idx]} (Distance: {distances[0][i]:.4f})")
+```
+
+---
+
+**🧾 Sample Output (JSON)**
+
+```json
+{
+  "query": "Travel destinations in Europe",
+  "results": [
+    {
+      "match_rank": 1,
+      "text": "Best places to visit in Europe",
+      "distance": 0.0000
+    },
+    {
+      "match_rank": 2,
+      "text": "The future of technology in education",
+      "distance": 0.6724
+    }
+  ]
+}
+```
+
+---
 
 ## 5. Storing Vectors in MongoDB
 
-Vectors can be stored with metadata for retrieval.
+After generating embeddings from text, you can store them in MongoDB along with metadata like category, tags, user ID, etc.
 
-When we generate embeddings (vectors) from text using a model like GPT, we can store these vectors in a database — along with extra information, called metadata.
+> 💡 **Use Case**: Search history, document labels, and filterable indexes in AI systems.
 
-### Example: Store vectors in MongoDB
+### 🧪 Code: Store and Filter Documents in MongoDB
 
-This metadata might include:
-
-The original text, A category or label (e.g., "FAQ", "Product Description"), Tags (e.g., "AI", "support", "finance"), Date/time of creation, User ID, document ID, etc.
-
-### Example: Store Embeddings in MongoDB
-
-
+```python
 from pymongo import MongoClient
 
-# MongoDB setup
-mongo_cluster = "mongodb+srv://manishsaijakkula:********@news-article.jjyhq8r.mongodb.net/"
+mongo_uri = "mongodb+srv://<username>:<password>@cluster.mongodb.net/"
+client = MongoClient(mongo_uri)
 
-client = MongoClient(mongo_cluster)
-database_name = "practise_db"
-collection = "employees"
+db = client["practise_db"]
+collection = db["employees"]
 
-database = client[database_name]
-employee_collection = database[collection]
+collection.insert_many([
+    {"name": "Rahul", "city": "HYD", "salary": 25000, "address": {"street": "filmnagar", "pin_code": 500039}},
+    {"name": "Umesh", "city": "HYD", "salary": 30000, "address": {"street": "bandra", "pin_code": 500045}},
+    {"name": "Roopesh", "city": "HYD", "salary": 55000, "address": {"street": "filmnagar", "pin_code": 500039}},
+])
 
- employee_collection.insert_many([
-     {"name" : "Rahul", "city" : "HYD", "salary" : 25000, "address" : {"street": "filmnagar", "pin_code" : 500039}},
-     {"name" : "Umesh", "city" : "HYD", "salary" : 30000, "address" : {"street": "bandra", "pin_code" : 500045}},
-     {"name" : "Roopesh", "city" : "HYD", "salary" : 55000, "address" : {"street": "filmnagar", "pin_code" : 500039}}
- ])
+print("Done!")
+```
 
-employee_collection.delete_many({
-    "address.pin_code" : {"$lt" : 500045}
-})
+---
+**Output:**
+```
+Done!
 
-print ("Done!!")
+```
 
-# output
-id: 686cdf2952a66e40a884f961
-name:"Rahul"
-city:"HYD"
-salary:25000
->address:Object
-street:"filmnagar"
-pin_code:500039
+---
 
-id: 686cdf2952a66e40a884f962
-name:"Umesh"
-city:"HYD"
-salary:30000
->address:Object
-street:"bandra"
-pin_code:500045
+**MongoDB Document**
+```json
+[
+  {
+    "_id": ObjectId("..."),
+    "name": "Rahul",
+    "city": "HYD",
+    "salary": 25000,
+    "address": {
+      "street": "filmnagar",
+      "pin_code": 500039
+    }
+  },
+  {
+    "_id": ObjectId("..."),
+    "name": "Umesh",
+    "city": "HYD",
+    "salary": 30000,
+    "address": {
+      "street": "bandra",
+      "pin_code": 500045
+    }
+  },
+  {
+    "_id": ObjectId("..."),
+    "name": "Roopesh",
+    "city": "HYD",
+    "salary": 55000,
+    "address": {
+      "street": "filmnagar",
+      "pin_code": 500039
+    }
+  }
+]
 
-id: 686cdf2952a66e40a884f963
-name:"Umesh"
-city:"HYD"
-salary:55000
->address:Object
-street:"filmnagar"
-pin_code:500039
+```
+
+---
 
 
 ## 6. FastAPI to Build AI Applications
 
-FastAPI makes it easy to build APIs for AI apps like chatbots, search, summarization, etc.
+Use **FastAPI** to build backend endpoints that return GPT responses, embedding vectors, or search results.
 
-**Example**: Notion AI and Grammarly use FastAPI-like backends to process summarization, Q&A, or rephrasing tasks on the fly.
+**Example**: A POST endpoint that takes a question and returns a GPT-4 generated answer.
 
-> **Use Case**: Deploying AI services as REST APIs for internal tools or web apps.
+> 💡 **Use Case**: Deploy GPT into websites, dashboards, internal tools, or mobile apps.
 
-### Example: FastAPI Endpoint to Embed Text
+### 🧪 Code: Chat Endpoint Using FastAPI
 
-
+```python
 from fastapi import FastAPI, Request
 import openai
 
-openai.api_key = "API_KEY"       # Replace this with your actual OpenAI key
-app = FastAPI()                  # Create a FastAPI app
+openai.api_key = "API_KEY"
+app = FastAPI()
 
-@app.post("/chat/")              # Define a POST endpoint at /chat/
-async def chat(req: Request):    
-    data = await req.json()      # Read the JSON data sent in the request
-    prompt = data.get("text")    # Extract the "text" field from that data
+@app.post("/chat/")
+async def chat(req: Request):
+    data = await req.json()
+    prompt = data.get("text")
 
-    response = openai.ChatCompletion.create(     # Call OpenAI's chat API
-        model="gpt-4",                  
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
         messages=[{"role": "user", "content": prompt}]
     )
 
-    answer = response['choices'][0]['message']['content']  # Extract the reply
-    return {"response": answer}  # Return it as a JSON response
+    answer = response['choices'][0]['message']['content']
+    return {"response": answer}
+```
 
+### 🛠 Run with:
 
-Run with:
-## cmd
+```python
 uvicorn app:app --reload
+```
 
-## JSON
+### 🔎 Sample Request:
+
+```json
 {
   "text": "What is AI?"
 }
+```
 
-# output:
+### ✅ Sample Response:
+
+```json
 {
   "response": "AI, or Artificial Intelligence, refers to the simulation of human intelligence in machines that are programmed to think and learn."
 }
-
-
-
-
-
-
+```
