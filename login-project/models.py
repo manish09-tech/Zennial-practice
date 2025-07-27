@@ -1,12 +1,25 @@
-from passlib.context import CryptContext
 from database import collection
+from auth import hash_password, verify_password
+from datetime import datetime
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def is_password_reused(new_pwd, past_pwds):
+    from auth import pwd_context
+    for old_pwd in past_pwds:
+        if pwd_context.verify(new_pwd, old_pwd):
+            return True
+    return False
 
-# Hash password
-def hash_password(password: str):
-    return pwd_context.hash(password)
-
-# Insert user
-def create_user(user_data: dict):
-    collection.insert_one(user_data)
+def update_password(email, new_hashed_password):
+    collection.update_one(
+        {"email": email},
+        {"$set": {
+            "password": new_hashed_password,
+            "last_password_change": datetime.now()
+        },
+        "$push": {
+            "password_history": {
+                "$each": [new_hashed_password],
+                "$slice": -5
+            }
+        }}
+    )

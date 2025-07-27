@@ -13,3 +13,9 @@ class UserRegister(BaseModel):
     address: str
     comments: Optional[str] = None
     active: bool
+
+class PasswordChangeRequest(BaseModel):
+    email: EmailStr
+    old_password: str
+    new_password: str
+

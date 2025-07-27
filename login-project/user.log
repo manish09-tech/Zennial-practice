@@ -1,2 +1,5 @@
 2025-07-27 14:45:26,948 - INFO - Received registration request for: manish@gmail.com
 2025-07-27 14:45:27,012 - WARNING - Duplicate registration attempt for: manish@gmail.com
+2025-07-27 16:00:23,342 - INFO - Received registration request for: manish@gmail.com
+2025-07-27 16:00:23,398 - WARNING - Duplicate registration attempt for: manish@gmail.com
+
