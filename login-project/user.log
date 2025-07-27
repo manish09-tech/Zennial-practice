@@ -3,3 +3,48 @@
 2025-07-27 16:00:23,342 - INFO - Received registration request for: manish@gmail.com
 2025-07-27 16:00:23,398 - WARNING - Duplicate registration attempt for: manish@gmail.com
 
+2025-07-27 20:12:09,984 - INFO - Registration attempt for email: manish@gmail.com
+2025-07-27 20:12:10,038 - INFO - Password policy passed for: manish@gmail.com
+2025-07-27 20:12:10,392 - INFO - User registered successfully: manish@gmail.com
+2025-07-27 20:12:34,849 - INFO - Login attempt for username: manish@gmail.com
+2025-07-27 20:12:35,165 - INFO - Login successful for: manish@gmail.com
+2025-07-27 20:12:54,909 - INFO - Login attempt for username: manish@gmail.com
+2025-07-27 20:12:55,228 - INFO - Login successful for: manish@gmail.com
+2025-07-27 20:13:04,823 - INFO - Password change attempt for: manish@gmail.com
+2025-07-27 20:13:05,723 - INFO - Password changed successfully for: manish@gmail.com
+2025-07-27 20:13:46,827 - INFO - User logout
+2025-07-27 20:14:48,337 - INFO - Registration attempt for email: manish@gmail.com
+2025-07-27 20:14:48,404 - INFO - Password policy passed for: manish@gmail.com
+2025-07-27 20:14:48,758 - INFO - User registered successfully: manish@gmail.com
+2025-07-27 20:15:14,471 - INFO - Login attempt for username: manish@gmail.com
+2025-07-27 20:15:14,799 - INFO - Login successful for: manish@gmail.com
+2025-07-27 20:16:30,536 - INFO - Registration attempt for email: manish@gmail.com
+2025-07-27 20:16:30,597 - WARNING - Registration failed – email already exists: manish@gmail.com
+2025-07-27 20:21:13,288 - INFO - FastAPI application started
+2025-07-27 20:22:54,154 - INFO - FastAPI application started
+2025-07-27 20:26:20,368 - INFO - FastAPI application started
+2025-07-27 20:26:36,861 - INFO - Registration attempt: manish@gmail.com
+2025-07-27 20:26:37,232 - INFO - Password policy passed: manish@gmail.com
+2025-07-27 20:26:37,565 - INFO - User registered: manish@gmail.com
+2025-07-27 20:30:43,071 - INFO - FastAPI application shutdown
+2025-07-27 20:31:02,427 - INFO - FastAPI application started
+2025-07-27 20:31:17,037 - INFO - FastAPI application shutdown
+2025-07-27 20:31:18,845 - INFO - FastAPI application started
+2025-07-27 20:31:53,810 - INFO - FastAPI application shutdown
+2025-07-27 20:32:01,281 - INFO - FastAPI application started
+2025-07-27 20:37:07,758 - INFO - FastAPI application shutdown
+2025-07-27 20:37:11,242 - INFO - FastAPI application started
+2025-07-27 20:37:33,421 - INFO - Registration attempt: manish@gmail.com
+2025-07-27 20:37:33,830 - INFO - Password policy passed: manish@gmail.com
+2025-07-27 20:37:34,180 - INFO - User registered: manish@gmail.com
+2025-07-27 20:37:52,016 - INFO - Login attempt: manish@gmail.com
+2025-07-27 20:37:52,321 - INFO - Login successful: manish@gmail.com
+2025-07-27 20:38:00,355 - INFO - Login attempt: manish@gmail.com
+2025-07-27 20:38:00,658 - INFO - Login successful: manish@gmail.com
+2025-07-27 20:38:27,977 - INFO - Password change attempt: manish@gmail.com
+2025-07-27 20:38:28,855 - INFO - Password changed: manish@gmail.com
+2025-07-27 20:38:38,886 - INFO - User logged out
+2025-07-27 20:39:10,203 - INFO - FastAPI application shutdown
+2025-07-27 20:39:14,378 - INFO - FastAPI application started
+2025-07-27 20:39:19,410 - INFO - User logged out successfully.
+2025-07-27 20:42:51,976 - INFO - FastAPI application shutdown
