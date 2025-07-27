@@ -1,21 +1,12 @@
-from pydantic import BaseModel, EmailStr
-from datetime import date
-from typing import Optional
+from passlib.context import CryptContext
+from database import collection
 
-class UserRegisterRequest(BaseModel):
-    first_name: str
-    last_name: str
-    email: EmailStr
-    phone: Optional[str]
-    password: str
-    dob: date
-    doj: date
-    address: str
-    comments: Optional[str] = None
-    active: bool
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Hash password
+def hash_password(password: str):
+    return pwd_context.hash(password)
 
-class UserLoginRequest(BaseModel):
-    email: EmailStr
-    password: str
-
+# Insert user
+def create_user(user_data: dict):
+    collection.insert_one(user_data)
