@@ -19,7 +19,7 @@
 2025-07-27 20:15:14,471 - INFO - Login attempt for username: manish@gmail.com
 2025-07-27 20:15:14,799 - INFO - Login successful for: manish@gmail.com
 2025-07-27 20:16:30,536 - INFO - Registration attempt for email: manish@gmail.com
-2025-07-27 20:16:30,597 - WARNING - Registration failed – email already exists: manish@gmail.com
+2025-07-27 20:16:30,597 - WARNING - Registration failed email already exists: manish@gmail.com
 2025-07-27 20:21:13,288 - INFO - FastAPI application started
 2025-07-27 20:22:54,154 - INFO - FastAPI application started
 2025-07-27 20:26:20,368 - INFO - FastAPI application started
@@ -48,3 +48,64 @@
 2025-07-27 20:39:14,378 - INFO - FastAPI application started
 2025-07-27 20:39:19,410 - INFO - User logged out successfully.
 2025-07-27 20:42:51,976 - INFO - FastAPI application shutdown
+2025-07-28 06:27:17,704 - INFO - FastAPI application started
+2025-07-28 06:27:32,697 - INFO - User token is destroyed (logout)
+2025-07-28 06:38:08,994 - INFO - FastAPI application shutdown
+2025-07-28 06:38:12,071 - INFO - FastAPI application started
+2025-07-28 06:42:12,869 - INFO - FastAPI application stopped
+2025-07-28 06:42:17,381 - INFO - FastAPI application started
+2025-07-28 06:42:42,691 - INFO - FastAPI application stopped
+2025-07-28 06:42:46,819 - INFO - FastAPI application started
+2025-07-28 06:43:10,236 - INFO - FastAPI application stopped
+2025-07-28 06:43:14,866 - INFO - FastAPI application started
+2025-07-28 06:45:46,234 - INFO - FastAPI application stopped
+2025-07-28 06:45:50,087 - INFO - FastAPI application started
+2025-07-28 06:46:10,066 - INFO - FastAPI application stopped
+2025-07-28 06:46:13,676 - INFO - FastAPI application started
+2025-07-28 06:47:10,194 - INFO - FastAPI application stopped
+2025-07-28 06:47:14,115 - INFO - FastAPI application started
+2025-07-28 06:47:44,459 - INFO - FastAPI application stopped
+2025-07-28 06:47:48,938 - INFO - FastAPI application started
+2025-07-28 06:48:06,883 - INFO - FastAPI application stopped
+2025-07-28 06:48:10,079 - INFO - FastAPI application started
+2025-07-28 06:49:52,418 - INFO - FastAPI application stopped
+2025-07-28 06:49:55,631 - INFO - FastAPI application started
+2025-07-28 06:49:59,568 - INFO - FastAPI application stopped
+2025-07-28 06:50:03,795 - INFO - FastAPI application started
+2025-07-28 06:50:19,881 - INFO - FastAPI application stopped
+2025-07-28 06:50:23,267 - INFO - FastAPI application started
+2025-07-28 06:51:47,613 - INFO - FastAPI application stopped
+2025-07-28 06:51:50,610 - INFO - FastAPI application started
+2025-07-28 06:54:32,192 - INFO - FastAPI application stopped
+2025-07-28 06:54:35,535 - INFO - FastAPI application started
+2025-07-28 06:55:17,186 - INFO - User registered: manish@gmail.com
+2025-07-28 06:55:55,271 - INFO - User logged in: manish@gmail.com
+2025-07-28 06:58:00,261 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:02:36,270 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:03:08,749 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:04:28,397 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:04:43,395 - INFO - Password changed for user: manish@gmail.com
+2025-07-28 07:05:15,457 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:09:07,642 - INFO - FastAPI application stopped
+2025-07-28 07:09:11,035 - INFO - FastAPI application started
+2025-07-28 07:10:23,170 - INFO - FastAPI application stopped
+2025-07-28 07:10:27,713 - INFO - FastAPI application started
+2025-07-28 07:10:47,138 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:26:17,397 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:26:48,098 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:31:39,135 - INFO - FastAPI application stopped
+2025-07-28 07:31:42,947 - INFO - FastAPI application started
+2025-07-28 07:32:14,998 - INFO - User registered: manish@gmail.com
+2025-07-28 07:32:28,163 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:32:45,952 - INFO - Password changed for user: manish@gmail.com
+2025-07-28 07:32:57,008 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:34:57,582 - INFO - FastAPI application stopped
+2025-07-28 07:35:01,957 - INFO - FastAPI application started
+2025-07-28 07:35:12,540 - INFO - FastAPI application stopped
+2025-07-28 07:35:16,461 - INFO - FastAPI application started
+2025-07-28 07:35:23,980 - INFO - FastAPI application stopped
+2025-07-28 07:35:28,565 - INFO - FastAPI application started
+2025-07-28 07:36:05,140 - INFO - FastAPI application stopped
+2025-07-28 07:44:48,579 - INFO - FastAPI application started
+2025-07-28 07:44:58,479 - INFO - User logged in: manish@gmail.com
+2025-07-28 07:45:30,504 - INFO - FastAPI application stopped
