@@ -1,8 +1,11 @@
 
 # PyMongo vs Motor in FastAPI
 
-## PyMongo Example (Synchronous – Blocking)
+## PyMongo (Synchronous – Blocking)
 
+PyMongo is the official synchronous Python driver for MongoDB. It provides a standard, blocking interface for interacting with MongoDB databases. This means that when a PyMongo operation (like a query or an insert) is executed, the program execution pauses until the database operation completes. This is suitable for applications where blocking I/O does not significantly impact performance or responsiveness.
+
+### Example
 ```python
 from fastapi import FastAPI
 from pymongo import MongoClient
@@ -49,8 +52,12 @@ GET /get_user/manish
 
 ---
 
-## Motor Example (Asynchronous)
+## Motor (Asynchronous)
 
+Motor was an asynchronous Python driver for MongoDB, designed for use with asynchronous frameworks like Tornado and asyncio. It provided a non-blocking interface, allowing database operations to be performed concurrently without pausing the entire application. This was particularly beneficial for applications requiring high concurrency, such as web servers or real-time applications.
+
+
+### Example
 ```python
 from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
