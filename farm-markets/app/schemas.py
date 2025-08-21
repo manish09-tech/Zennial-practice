@@ -10,14 +10,14 @@ class UserCreate(BaseModel):
     role: str # farmer or buyer
 
 class UserOut(BaseModel):
-    _id: str = Field(alias="_id")
+    id: str = Field(alias="id")
     name: str
     email: EmailStr
     role: str
     created_at: datetime
 
     class Config:
-        allow_population_by_field_name = True
+        validate_by_name = True
         json_encoders = {
             datetime: lambda v: v.isoformat()
         }
@@ -38,14 +38,14 @@ class ProductCreate(BaseModel):
     quantity: int
 
 class ProductOut(BaseModel):
-    _id: str = Field(alias="_id")
+    id: str = Field(alias="id")
     name: str
     price: float
     quantity: int
     created_at: datetime
 
     class Config:
-        allow_population_by_field_name = True
+        validate_by_name = True
         json_encoders = {
             datetime: lambda v: v.isoformat()
         }
@@ -56,7 +56,7 @@ class OrderCreate(BaseModel):
     quantity: int
 
 class OrderOut(BaseModel):
-    _id: str = Field(alias="_id")
+    id: str = Field(alias="_id")
     product_id: str
     buyer_id: str
     quantity: int
@@ -64,7 +64,7 @@ class OrderOut(BaseModel):
     created_at: datetime
     
     class Config:
-        allow_population_by_field_name = True
+        validate_by_name = True
         json_encoders = {
             datetime: lambda v: v.isoformat()
         }

@@ -5,9 +5,9 @@ from motor.motor_asyncio import AsyncIOMotorClient
 # load environment
 load_dotenv()
 
-MONGO_URL = os.getenv("MONGO_URL")
+MONGO_URL = os.getenv("MONGO_URI")
 if not MONGO_URL:
-    raise RuntimeError("MONGO_URL not set in environment or .env")
+    raise RuntimeError("MONGO_URI not set in environment or .env")
 
 client = AsyncIOMotorClient(MONGO_URL)
 db = client["farm_markets_db"]
