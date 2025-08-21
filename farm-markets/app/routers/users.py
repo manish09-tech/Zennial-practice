@@ -26,3 +26,11 @@ async def register(user: UserCreate):
     }
 
     await users_collection.insert_one(user_doc)
+
+    return UserOut(
+        id=id,
+        name=user.name,
+        email=user.email,
+        role=user.role,
+        created_at=user_doc["created_at"]
+    )
