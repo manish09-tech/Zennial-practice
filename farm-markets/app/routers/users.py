@@ -1,6 +1,7 @@
 # app/routers/users.py
 from fastapi import APIRouter, HTTPException, status
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import uuid
 
 from app.database import users_collection, farmers_collection
@@ -8,6 +9,8 @@ from app.schemas import UserCreate, UserOut, LoginData, Token
 from app.auth import hash_password, verify_password, create_access_token
 
 router = APIRouter(prefix="/users", tags=["Users"])
+
+IST = ZoneInfo("Asia/Kolkata")
 
 @router.post("/register", response_model=UserOut)
 async def register(user: UserCreate):
@@ -22,7 +25,7 @@ async def register(user: UserCreate):
         "email": user.email,
         "hashed_password": hash_password(user.password),
         "role": user.role,
-        "created_at": datetime.utcnow()
+        "created_at": datetime.now(IST)
     }
 
     await users_collection.insert_one(user_doc)
