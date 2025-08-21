@@ -1,7 +1,6 @@
 fastapi
-uvicorn[standard]
+uvicorn
 motor
 passlib[bcrypt]
 python-jose[cryptography]
 pydantic
-python-multipart
