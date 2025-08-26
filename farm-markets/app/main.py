@@ -8,4 +8,4 @@ app.include_router(farmers.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Farm Markets API - visit /docs"}
+    return {"message": "Welcome to Farm Markets API"}

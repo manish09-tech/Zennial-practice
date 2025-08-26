@@ -1,6 +1,5 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, EmailStr
 from typing import Optional
-from datetime import datetime
 
 # Users
 class UserCreate(BaseModel):
@@ -10,17 +9,11 @@ class UserCreate(BaseModel):
     role: str # farmer or buyer
 
 class UserOut(BaseModel):
-    id: str = Field(alias="id")
+    id: str 
     name: str
     email: EmailStr
     role: str
-    created_at: datetime
-
-    class Config:
-        validate_by_name = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+    created_at: str # ISO formatted datetime string
 
 class LoginData(BaseModel):
         email: EmailStr
@@ -34,21 +27,20 @@ class Token(BaseModel):
 # Products
 class ProductCreate(BaseModel):
     name: str
+    description: Optional[str] = None
     price: float
     quantity: int
+
 
 class ProductOut(BaseModel):
-    id: str = Field(alias="id")
+    id: str
     name: str
+    description: Optional[str] = None
     price: float
     quantity: int
-    created_at: datetime
+    farmer_id: str
+    created_at: str
 
-    class Config:
-        validate_by_name = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
 
 # Orders
 class OrderCreate(BaseModel):
@@ -56,15 +48,12 @@ class OrderCreate(BaseModel):
     quantity: int
 
 class OrderOut(BaseModel):
-    id: str = Field(alias="_id")
-    product_id: str
+    id: str
     buyer_id: str
+    farmer_id: str
+    product_id: str
     quantity: int
     total_price: float
-    created_at: datetime
+    status: str
+    created_at: str
     
-    class Config:
-        validate_by_name = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
