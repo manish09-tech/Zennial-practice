@@ -15,3 +15,12 @@ farmers_collection = db.get_collection("farmers")
 products_collection = db.get_collection("products")
 orders_collection = db.get_collection("orders")
 buyers_collection = db.get_collection("buyers")
+blacklisted_tokens_collection = db.get_collection("blacklisted_tokens")
+
+# TTL(time-to-live) index for blacklisted tokens
+async def init_indexes():
+    # automatically delete expired tokens
+    await blacklisted_tokens_collection.create_index(
+        "expires_at", expireAfterSeconds=0
+    )
+

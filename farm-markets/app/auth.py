@@ -3,8 +3,9 @@ from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
+from app.database import blacklisted_tokens_collection
 
 load_dotenv()
 
@@ -36,17 +37,21 @@ def create_access_token(subject: str, expires_delta: timedelta | None = None) ->
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 # JWT decoding -> returns user_id (string)
-async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+async def get_current_user_id(token: str = Depends(oauth2_scheme)):
+    # check blacklist
+    if await is_token_blacklisted(token):
+        raise HTTPException(status_code=401, detail="Token has been logged out")
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str | None = payload.get("sub")
-        if not user_id:
-            raise credentials_exception
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
         return user_id
     except JWTError:
-        raise credentials_exception
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    
+async def is_token_blacklisted(token: str):
+    doc = await blacklisted_tokens_collection.find_one({"token": token})
+    return doc is not None

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import users, farmers, buyers, products, orders
+from app.routers import users, farmers, buyers, products, orders, logout
 
 app = FastAPI(title="Farm Markets API")
 
@@ -9,6 +9,7 @@ app.include_router(farmers.router)
 app.include_router(buyers.router)
 app.include_router(products.router)
 app.include_router(orders.router)
+app.include_router(logout.router)
 
 @app.get("/")
 async def root():
