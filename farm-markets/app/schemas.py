@@ -1,36 +1,34 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-# Users
+# Users 
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
     password: str
-    role: str # farmer or buyer
+    role: str  # "farmer" | "buyer"
 
 class UserOut(BaseModel):
-    id: str 
+    id: str
     name: str
     email: EmailStr
     role: str
-    created_at: str # ISO formatted datetime string
+    created_at: str  # ISO with +05:30
 
 class LoginData(BaseModel):
-        email: EmailStr
-        password: str
+    email: EmailStr
+    password: str
 
 class Token(BaseModel):
-        access_token: str
-        token_type: str = "bearer"
+    access_token: str
+    token_type: str = "bearer"
 
-
-# Products
+# Products 
 class ProductCreate(BaseModel):
     name: str
     description: Optional[str] = None
     price: float
     quantity: int
-
 
 class ProductOut(BaseModel):
     id: str
@@ -41,8 +39,7 @@ class ProductOut(BaseModel):
     farmer_id: str
     created_at: str
 
-
-# Orders
+# Orders 
 class OrderCreate(BaseModel):
     product_id: str
     quantity: int
@@ -56,4 +53,3 @@ class OrderOut(BaseModel):
     total_price: float
     status: str
     created_at: str
-    

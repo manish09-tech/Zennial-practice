@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
 
-# load environment
 load_dotenv()
 
 MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://manishsaijakkula:Manishj09@news-article.jjyhq8r.mongodb.net/")
