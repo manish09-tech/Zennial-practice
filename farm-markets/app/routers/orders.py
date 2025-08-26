@@ -6,6 +6,7 @@ from app.utils import new_id
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
+
 # Buyer places an order
 @router.post("/", response_model=OrderOut, status_code=status.HTTP_201_CREATED)
 async def place_order(data: OrderCreate, user_id: str = Depends(get_current_user_id)):
@@ -41,59 +42,78 @@ async def place_order(data: OrderCreate, user_id: str = Depends(get_current_user
         {"$inc": {"quantity": -data.quantity}}
     )
 
-    return OrderOut(
-        id=order_id,
-        buyer_id=order_doc["buyer_id"],
-        farmer_id=order_doc["farmer_id"],
-        product_id=order_doc["product_id"],
-        quantity=order_doc["quantity"],
-        total_price=order_doc["total_price"],
-        status=order_doc["status"],
-        created_at=order_doc["created_at"],
+    return OrderOut(**order_doc, id=order_id)
+
+
+# Buyer updates own order (only if pending)
+@router.put("/{order_id}", response_model=OrderOut)
+async def update_order(order_id: str, data: OrderCreate, user_id: str = Depends(get_current_user_id)):
+    buyer = await users_collection.find_one({"_id": user_id})
+    if not buyer or buyer.get("role") != "buyer":
+        raise HTTPException(status_code=403, detail="Only buyers can update orders")
+
+    order = await orders_collection.find_one({"_id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if order["buyer_id"] != user_id:
+        raise HTTPException(status_code=403, detail="You can update only your own orders")
+
+    if order["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Only pending orders can be updated")
+
+    product = await products_collection.find_one({"_id": order["product_id"]})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # restore previous stock before checking new quantity
+    await products_collection.update_one(
+        {"_id": order["product_id"]},
+        {"$inc": {"quantity": order["quantity"]}}
     )
 
-# Buyer: my orders
-@router.get("/my", response_model=list[OrderOut])
-async def my_orders(user_id: str = Depends(get_current_user_id)):
-    user = await users_collection.find_one({"_id": user_id})
-    if not user or user.get("role") != "buyer":
-        raise HTTPException(status_code=403, detail="Only buyers can view their orders")
+    if product["quantity"] + order["quantity"] < data.quantity:
+        raise HTTPException(status_code=400, detail="Not enough stock available")
 
-    out: list[OrderOut] = []
-    async for o in orders_collection.find({"buyer_id": user_id}):
-        out.append(
-            OrderOut(
-                id=o["_id"],
-                buyer_id=o["buyer_id"],
-                farmer_id=o["farmer_id"],
-                product_id=o["product_id"],
-                quantity=o["quantity"],
-                total_price=o["total_price"],
-                status=o["status"],
-                created_at=o.get("created_at", ""),
-            )
-        )
-    return out
+    total_price = float(product["price"]) * int(data.quantity)
 
-# Farmer: incoming orders
-@router.get("/incoming", response_model=list[OrderOut])
-async def incoming_orders(user_id: str = Depends(get_current_user_id)):
-    user = await users_collection.find_one({"_id": user_id})
-    if not user or user.get("role") != "farmer":
-        raise HTTPException(status_code=403, detail="Only farmers can view incoming orders")
+    await orders_collection.update_one(
+        {"_id": order_id},
+        {"$set": {"quantity": data.quantity, "total_price": total_price}}
+    )
 
-    out: list[OrderOut] = []
-    async for o in orders_collection.find({"farmer_id": user_id}):
-        out.append(
-            OrderOut(
-                id=o["_id"],
-                buyer_id=o["buyer_id"],
-                farmer_id=o["farmer_id"],
-                product_id=o["product_id"],
-                quantity=o["quantity"],
-                total_price=o["total_price"],
-                status=o["status"],
-                created_at=o.get("created_at", ""),
-            )
-        )
-    return out
+    # decrement stock again
+    await products_collection.update_one(
+        {"_id": order["product_id"]},
+        {"$inc": {"quantity": -data.quantity}}
+    )
+
+    updated = await orders_collection.find_one({"_id": order_id})
+    return OrderOut(**updated, id=updated["_id"])
+
+
+# Buyer deletes own order (restore stock if pending)
+@router.delete("/{order_id}")
+async def delete_order(order_id: str, user_id: str = Depends(get_current_user_id)):
+    buyer = await users_collection.find_one({"_id": user_id})
+    if not buyer or buyer.get("role") != "buyer":
+        raise HTTPException(status_code=403, detail="Only buyers can delete orders")
+
+    order = await orders_collection.find_one({"_id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if order["buyer_id"] != user_id:
+        raise HTTPException(status_code=403, detail="You can delete only your own orders")
+
+    if order["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Only pending orders can be deleted")
+
+    # restore stock
+    await products_collection.update_one(
+        {"_id": order["product_id"]},
+        {"$inc": {"quantity": order["quantity"]}}
+    )
+
+    await orders_collection.delete_one({"_id": order_id})
+    return {"message": "Order deleted successfully"}
